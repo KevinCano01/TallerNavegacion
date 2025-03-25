@@ -13,14 +13,11 @@ Esta aplicación en Flutter demuestra el uso de navegación con `go_router`, wid
 
 ## Ejecución
 1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/KevinCano01/taller_flutter.git
-   ```
+   git clone https://github.com/KevinCano01/TallerNavegacion.git
+
 2. Instala las dependencias:
-   ```bash
    flutter pub get
-   ```
+
 3. Ejecuta la aplicación:
-   ```bash
    flutter run
-   ```
+
