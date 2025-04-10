@@ -45,6 +45,9 @@ class CicloVidaScreenState extends State<CicloVidaScreen> {
 
     return BaseView(
       title: "Ciclo de Vida de en flutter",
+      initialIndex:
+          3, // ← Este índice corresponde con '/ciclo_vida' en BaseView
+      length: 1,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

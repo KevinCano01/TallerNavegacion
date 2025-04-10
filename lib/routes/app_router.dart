@@ -17,6 +17,11 @@ import 'package:hola_mundo/views/taller_api/listado_screen.dart';
 import 'package:hola_mundo/views/taller_api/detalle_screen.dart' as api;
 import 'package:hola_mundo/models/meal_model.dart';
 
+// Importación de la vista de establecimientos
+import 'package:hola_mundo/views/establecimientos/establecimiento_edit_view.dart';
+import 'package:hola_mundo/views/establecimientos/establecimiento_create_views.dart';
+import 'package:hola_mundo/views/establecimientos/establecimiento_list_view.dart';
+
 final GoRouter appRouter = GoRouter(
   routes: [
     // Ruta principal - Página de inicio
@@ -79,6 +84,25 @@ final GoRouter appRouter = GoRouter(
         final meal = state.extra as Meal;
         return api.DetalleScreen(meal: meal);
       },
+    ),
+    // Establecimientos
+    GoRoute(
+      path: '/establecimientos',
+      name: 'establecimientos',
+      builder: (context, state) => const EstablecimientosListView(),
+    ),
+    //! Ruta para editar un establecimiento
+    GoRoute(
+      path: '/establecimientos/edit/:id',
+      builder: (context, state) {
+        //* Capturamos el id del establecimiento
+        final id = int.parse(state.pathParameters['id']!);
+        return EstablecimientoEditView(id: id);
+      },
+    ),
+    GoRoute(
+      path: '/establecimientos/create',
+      builder: (context, state) => const EstablecimientoCreateView(),
     ),
   ],
 );

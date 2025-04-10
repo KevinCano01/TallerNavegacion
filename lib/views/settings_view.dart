@@ -7,7 +7,9 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView(
-      title: 'Configuración', // Título de la pantalla
+      title: 'Configuración',
+      initialIndex: 2, // ← índice usado en el switch para /settings
+      length: 1,
       body: const Center(child: Text('Pantalla de configuración')),
     );
   }
