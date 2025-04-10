@@ -6,6 +6,21 @@ import 'package:hola_mundo/views/paso_parametros/paso_parametros_screen.dart';
 import 'package:hola_mundo/views/profile_view.dart';
 import 'package:hola_mundo/views/settings_view.dart';
 
+// Importación de las nuevas pantallas del taller async (Future, Timer e Isolate)
+import 'package:hola_mundo/views/taller_async/lista_estudiantes_screen.dart';
+import 'package:hola_mundo/views/taller_async/contador_screen.dart';
+import 'package:hola_mundo/views/taller_async/tarea_pesada_screen.dart';
+
+// Importación de las nuevas pantallas del taller API
+import 'package:hola_mundo/views/taller_api/listado_screen.dart';
+import 'package:hola_mundo/views/taller_api/detalle_screen.dart' as api;
+import 'package:hola_mundo/models/meal_model.dart';
+
+// Importación de la vista de establecimientos
+import 'package:hola_mundo/views/establecimientos/establecimiento_edit_view.dart';
+import 'package:hola_mundo/views/establecimientos/establecimiento_create_views.dart';
+import 'package:hola_mundo/views/establecimientos/establecimiento_list_view.dart';
+
 final GoRouter appRouter = GoRouter(
   routes: [
     // Ruta principal - Página de inicio
@@ -43,6 +58,52 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/ciclo_vida',
       builder: (context, state) => const CicloVidaScreen(),
+    ),
+
+    //! Rutas del taller async (Future, Timer e Isolate)
+    GoRoute(
+      path: '/lista_estudiantes',
+      builder: (context, state) => const ListaEstudiantesScreen(),
+    ),
+    GoRoute(
+      path: '/contador',
+      builder: (context, state) => const ContadorScreen(),
+    ),
+    GoRoute(
+      path: '/tarea_pesada',
+      builder: (context, state) => const TareaPesadaScreen(),
+    ),
+
+    //! Rutas del taller de consumo de API
+    GoRoute(
+      path: '/listado',
+      builder: (context, state) => const ListadoScreen(),
+    ),
+    GoRoute(
+      path: '/detalle_comida',
+      builder: (context, state) {
+        final meal = state.extra as Meal;
+        return api.DetalleScreen(meal: meal);
+      },
+    ),
+    // Establecimientos
+    GoRoute(
+      path: '/establecimientos',
+      name: 'establecimientos',
+      builder: (context, state) => const EstablecimientosListView(),
+    ),
+    //! Ruta para editar un establecimiento
+    GoRoute(
+      path: '/establecimientos/edit/:id',
+      builder: (context, state) {
+        //* Capturamos el id del establecimiento
+        final id = int.parse(state.pathParameters['id']!);
+        return EstablecimientoEditView(id: id);
+      },
+    ),
+    GoRoute(
+      path: '/establecimientos/create',
+      builder: (context, state) => const EstablecimientoCreateView(),
     ),
   ],
 );

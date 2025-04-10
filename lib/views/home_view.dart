@@ -8,14 +8,15 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView(
-      title: 'UCEVA', // Título de la pantalla
+      title: 'UCEVA',
+      initialIndex: 0, // ← ahora se pasa correctamente
+      length: 1, // ← también requerido por BaseView
       body: Column(
         children: [
           const Center(child: Text('Bienvenido a la pantalla de inicio')),
           Contador(),
         ],
       ),
-      //
     );
   }
 }
