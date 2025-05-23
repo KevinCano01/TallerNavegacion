@@ -1,8 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hola_mundo/services/auth_service.dart';
+import 'package:hola_mundo/models/user.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
+
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, _loadUser);
+  }
+
+  Future<void> _loadUser() async {
+    final u = await AuthService().getUser();
+    setState(() => user = u);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +34,19 @@ class CustomDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
             ),
-            child: const Text(
-              'Menú',
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  user?.name ?? 'Usuario desconocido',
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  user?.email ?? '',
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
             ),
           ),
           ListTile(
@@ -39,11 +69,10 @@ class CustomDrawer extends StatelessWidget {
             leading: const Icon(Icons.person),
             title: const Text('Perfil'),
             onTap: () {
-              context.go('/profile');
+              context.replace('/profile');
               Navigator.pop(context);
             },
           ),
-          //! PASO DE PARÁMETROS
           ListTile(
             leading: const Icon(Icons.input),
             title: const Text('Paso de Parámetros'),
@@ -52,7 +81,6 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          //! CICLO DE VIDA
           ListTile(
             leading: const Icon(Icons.loop),
             title: const Text('Ciclo de Vida'),
@@ -62,7 +90,6 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           const Divider(),
-          //! TALLER ASYNC - Lista de Estudiantes
           ListTile(
             leading: const Icon(Icons.list),
             title: const Text('Lista de Estudiantes'),
@@ -71,7 +98,6 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          //! TALLER ASYNC - Contador con Timer
           ListTile(
             leading: const Icon(Icons.timer),
             title: const Text('Timer'),
@@ -80,7 +106,6 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          //! TALLER ASYNC - Tarea Pesada (Isolate)
           ListTile(
             leading: const Icon(Icons.computer),
             title: const Text('Tarea Pesada'),
@@ -89,7 +114,6 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          //! TALLER API - Listado de Comidas
           ListTile(
             leading: const Icon(Icons.fastfood),
             title: const Text('Listado de Comidas'),
@@ -99,13 +123,42 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.business),
-            title: Text('Establecimientos'),
+            leading: const Icon(Icons.business),
+            title: const Text('Establecimientos'),
             onTap: () {
-              // Navegación con GoRouter
               context.push('/establecimientos');
             },
           ),
+          const Divider(),
+          if (user == null) ...[
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text('Iniciar sesión'),
+              onTap: () {
+                context.goNamed('login');
+                Navigator.pop(context);
+              },
+            ),
+          ] else ...[
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
+              onTap: () async {
+                final token = await AuthService().getToken();
+                if (token != null) {
+                  await AuthService().logout();
+                  if (!context.mounted) return;
+                  context.go('/login');
+                } else {
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No hay sesión activa.')),
+                  );
+                }
+              },
+            ),
+          ],
         ],
       ),
     );
